@@ -26,4 +26,23 @@ router.post('/', async (req, res) => {
   }
 });
 
+router.get('/:id', async (req, res) => {
+    if (!req.params.id) {
+        return res.sendStatus(404);
+    }
+
+    try {
+        const business = await Business.find(req.params.id);
+        if (!business) {
+            return res.sendStatus(404);
+        }
+        res.json(business);
+    } catch (error) {
+        console.error(
+        `GetBusiness(${req.id}) >> Error: ${error.stack}`
+        );
+        return res.sendStatus(500);
+    }
+})
+
 module.exports = router;
