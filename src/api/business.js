@@ -28,13 +28,13 @@ router.post('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     if (!req.params.id) {
-        return res.sendStatus(404);
+        return res.sendStatus(400);
     }
 
     try {
         const business = await Business.find(req.params.id);
         if (!business) {
-            return res.sendStatus(404);
+            return res.sendStatus(200);
         }
         res.json(business);
     } catch (error) {
