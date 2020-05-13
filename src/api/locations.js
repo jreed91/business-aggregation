@@ -1,20 +1,23 @@
 const {Router} = require('express');
 const Locations = require('../persistence/locations');
 const Addresses = require('../persistence/addresses');
+const HoursPersistence = require('../persistence/hours');
+
 
 const router = new Router();
 
 router.post('/', async (req, res) => {
   try {
-    const {businessId, locationName, primaryPhone, website, storeCode, address} = req.body;
+    const {businessId, locationName, primaryPhone, website, storeCode, address, hours} = req.body;
     if (!businessId || !locationName || !primaryPhone || !website || !storeCode || !address) {
       return res
         .status(400)
         .json({message: 'All fields must be provided'});
     }
-
     const savedAddress = await Addresses.create(address.addressLine, address.locality, address.region, address.postalCode)
     const location = await Locations.create(businessId, locationName, primaryPhone, website, storeCode, savedAddress.id);
+    const savedHours = await HoursPersistence.create(hours, location.id);
+
     if (!location) {
       return res.status(400).json({message: 'Location already exists'});
     }
@@ -35,6 +38,8 @@ router.get('/:id', async (req, res) => {
 
     try {
         const location = await Locations.find(req.params.id);
+        location.address = await Addresses.find(location.address_id);
+
         if (!location) {
             return res.sendStatus(200);
         }

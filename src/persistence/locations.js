@@ -23,7 +23,7 @@ module.exports = {
   },
   async find(id) {
     const {rows} = await db.query(sql`
-    SELECT * FROM location WHERE id=${id} LIMIT 1;
+    SELECT * FROM locations WHERE id=${id} LIMIT 1;
     `);
     return rows[0];
   }

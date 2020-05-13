@@ -5,27 +5,23 @@ const {
 const db = require('./db');
 
 module.exports = {
-  async create([hours], location_id) {
-    const savedHours = []
-
+  async create(hours, location_id) {
     try {
-      hours.forEach(hour => {
-        const {
-          rows
-        } = await db.query(sql `
+      const savedHours = []
+      for (const hour of hours) {
+        const {rows} = await db.query(sql `
                 INSERT INTO hours (id, openDay, closeDay, openTime, closeTime)
-                VALUES (${uuidv4()}, ${hour.openday}, ${hour.closeday}, ${hour.opentime}, ${hour.closetime})
+                VALUES (${uuidv4()}, ${hour.openDay}, ${hour.closeDay}, ${hour.openTime}, ${hour.closeTime})
                 RETURNING id;
             `);
-        await db.query(sql `
-                INSERT INTO hours_set (location_id, hour_id)
-                VALUES (${location_id}, ${rows.id}`)
-        const hour = {
-          rows
-        };
-        savedHours.push(hour);
-      });
+        const hourId = rows[0].id
 
+        const {set} =  await db.query(sql `
+                INSERT INTO hours_set (location_id, hours_id)
+                VALUES (${location_id}, ${hourId})`)
+        const savedHour = {rows};
+        savedHours.push(savedHour);
+      }
       return savedHours;
     } catch (error) {
       if (error.constraint === 'hours_key') {
