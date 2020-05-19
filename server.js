@@ -11,7 +11,11 @@ const api = require('./src/api');
 
 app.get('/', (req, res) => res.sendStatus(200));
 app.get('/health', (req, res) => res.sendStatus(200));
-
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "http://localhost:3001");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 app.use(morgan('short'));
 app.use(express.json());
 app.use(
