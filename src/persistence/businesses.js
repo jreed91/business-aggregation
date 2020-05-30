@@ -24,7 +24,7 @@ module.exports = {
   async update(id, name) {
     try {
       const {rows} = await db.query(sql`
-        UPDATE businesses (name)
+        UPDATE businesses
         SET name = ${name}
         WHERE id =${id};
       `);
