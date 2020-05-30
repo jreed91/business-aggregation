@@ -21,7 +21,7 @@ module.exports = {
       throw error;
     }
   },
-  async update(name) {
+  async update(id, name) {
     try {
       const {rows} = await db.query(sql`
         UPDATE businesses (name)

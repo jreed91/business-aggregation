@@ -29,13 +29,13 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const {name} = req.body;
-    if (!name) {
+    if (!name || !req.params.id) {
       return res
         .status(400)
-        .json({message: 'name must be provided'});
+        .json({message: 'name and id must be provided'});
     }
     
-    const business = await Business.create(name);
+    const business = await Business.update(req.params.id, name);
 
     return res.status(200).json(business);
   } catch (error) {
