@@ -43,6 +43,21 @@ router.get('/:id', async (req, res) => {
         );
         return res.sendStatus(500);
     }
+});
+
+router.get('/', async (req, res) => {
+  try {
+      const business = await Business.findAll();
+      if (!business) {
+          return res.sendStatus(200);
+      }
+      res.json(business);
+  } catch (error) {
+      console.error(
+      `GetBusiness(${req.id}) >> Error: ${error.stack}`
+      );
+      return res.sendStatus(500);
+  }
 })
 
 module.exports = router;

@@ -26,5 +26,11 @@ module.exports = {
     SELECT * FROM businesses WHERE id=${id} LIMIT 1;
     `);
     return rows[0];
+  },
+  async findAll() {
+    const {rows} = await db.query(sql`
+    SELECT * FROM businesses;
+    `);
+    return rows;
   }
 };
