@@ -26,6 +26,26 @@ router.post('/', async (req, res) => {
   }
 });
 
+router.put('/:id', async (req, res) => {
+  try {
+    const {name} = req.body;
+    if (!name) {
+      return res
+        .status(400)
+        .json({message: 'name must be provided'});
+    }
+    
+    const business = await Business.create(name);
+
+    return res.status(200).json(business);
+  } catch (error) {
+    console.error(
+      `updateBusiness({ business: ${req.body.name} }) >> Error: ${error.stack}`
+    );
+    res.status(500).json();
+  }
+});
+
 router.get('/:id', async (req, res) => {
     if (!req.params.id) {
         return res.sendStatus(400);

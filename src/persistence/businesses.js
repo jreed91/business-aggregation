@@ -21,6 +21,24 @@ module.exports = {
       throw error;
     }
   },
+  async update(name) {
+    try {
+      const {rows} = await db.query(sql`
+        UPDATE businesses (name)
+        SET name = ${name}
+        WHERE id =${id};
+      `);
+
+      const [business] = rows;
+      return business;
+    } catch (error) {
+      if (error.constraint === 'business_key') {
+        return null;
+      }
+
+      throw error;
+    }
+  },
   async find(id) {
     const {rows} = await db.query(sql`
     SELECT * FROM businesses WHERE id=${id} LIMIT 1;
