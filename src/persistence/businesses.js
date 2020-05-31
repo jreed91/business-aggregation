@@ -50,5 +50,11 @@ module.exports = {
     SELECT * FROM businesses;
     `);
     return rows;
+  },
+  async findAllLocations(id) {
+    const {rows} = await db.query(sql`
+    SELECT * FROM locations Where business_id=${id};
+    `);
+    return rows;
   }
 };

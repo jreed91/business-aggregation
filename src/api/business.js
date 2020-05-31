@@ -80,4 +80,19 @@ router.get('/', async (req, res) => {
   }
 })
 
+router.get('/:id/locations', async (req, res) => {
+  try {
+      const business = await Business.findAllLocations(req.params.id);
+      if (!business) {
+          return res.sendStatus(200);
+      }
+      res.json(business);
+  } catch (error) {
+      console.error(
+      `Find all locations (${req.id}) >> Error: ${error.stack}`
+      );
+      return res.sendStatus(500);
+  }
+})
+
 module.exports = router;
